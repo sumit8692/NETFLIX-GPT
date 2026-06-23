@@ -1,11 +1,28 @@
 
 import { useState } from 'react'
 import { Header } from "./Header"
-
+import { useRef } from 'react'
+import checkValidateData from '../utils/validate'
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false)
   const [isSignInForm, setIsSignInForm] = useState(true)
+  const [errorMsg, setErrorMsg] = useState(null)
 
+  const email = useRef(null)
+  const password = useRef(null)
+
+  const handleButtonClick = (e) => {
+    e.preventDefault()
+    const emailValue = email.current.value
+    const passwordValue = password.current.value
+    const { isValid, message } = checkValidateData(emailValue, passwordValue)
+    if (!isValid) {
+      setErrorMsg(message)
+      return
+    }
+    setErrorMsg('')
+    // TODO: sign in / sign up logic here
+  }
   const toggleSignInForm = () => {
     setIsSignInForm(!isSignInForm)
   }
@@ -19,7 +36,7 @@ const Login = () => {
           alt="Browse Image"
           className="w-full h-auto opacity-40"
         />
-        <form className="absolute opacity-80 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-black/70 backdrop-blur-sm p-6 sm:p-10 w-11/12 max-w-md rounded-xl shadow-xl text-white">
+        <form onSubmit={handleButtonClick} className="absolute opacity-80 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-black/70 backdrop-blur-sm p-6 sm:p-10 w-11/12 max-w-md rounded-xl shadow-xl text-white">
 
           {/* Header text */}
           <div className="space-y-4">
@@ -51,6 +68,7 @@ const Login = () => {
             {/* Email */}
             <label className="sr-only" htmlFor="email">Email</label>
             <input
+              ref={email}
               id="email"
               type="email"
               placeholder="Email address"
@@ -61,6 +79,7 @@ const Login = () => {
             <label className="sr-only" htmlFor="password">Password</label>
             <div className="relative">
               <input
+                ref={password}
                 id="password"
                 type={showPassword ? 'text' : 'password'}
                 placeholder="Password"
@@ -69,7 +88,7 @@ const Login = () => {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
+                className="cursor-pointer absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
                 aria-label={showPassword ? 'Hide password' : 'Show password'}
               >
                 {showPassword ? (
@@ -96,10 +115,15 @@ const Login = () => {
               </div>
             )}
 
+            {/* Validation error message */}
+            {errorMsg && (
+              <p className="text-red-500 text-sm font-medium">{errorMsg}</p>
+            )}
+
             {/* Submit button */}
             <button
               type="submit"
-              className="w-full bg-red-600 hover:bg-red-700 text-white py-3 rounded-md shadow transition-colors"
+              className="cursor-pointer w-full bg-red-600 hover:bg-red-700 text-white py-3 rounded-md shadow transition-colors"
             >
               {isSignInForm ? 'Sign In' : 'Sign Up'}
             </button>
