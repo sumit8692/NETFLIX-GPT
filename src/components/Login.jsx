@@ -1,8 +1,13 @@
-
 import { useState } from 'react'
-import { Header } from "./Header"
 import { useRef } from 'react'
+import { Header } from "./Header"
 import checkValidateData from '../utils/validate'
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "firebase/auth"
+import { auth } from '../utils/firebase'
+import { useNavigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { addUser } from '../utils/userSlice'
+
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false)
   const [isSignInForm, setIsSignInForm] = useState(true)
@@ -10,11 +15,16 @@ const Login = () => {
 
   const email = useRef(null)
   const password = useRef(null)
+  const name = useRef(null)
+
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
 
   const handleButtonClick = (e) => {
     e.preventDefault()
-    const emailValue = email.current.value
-    const passwordValue = password.current.value
+    const emailValue = email.current?.value
+    const passwordValue = password.current?.value
+    const nameValue = name.current?.value
     const { isValid, message } = checkValidateData(emailValue, passwordValue)
     if (!isValid) {
       setErrorMsg(message)
@@ -22,6 +32,43 @@ const Login = () => {
     }
     setErrorMsg('')
     // TODO: sign in / sign up logic here
+    if(message === "Validation successful.") {
+      console.log("Form is valid. Proceed with sign in or sign up logic.")
+    }
+    if(!isSignInForm) {
+      // Sign Up logic
+      createUserWithEmailAndPassword(auth, emailValue, passwordValue)
+      .then((userCredential) => {
+        // Signed up 
+        const user = userCredential.user;
+        updateProfile(user, {
+          displayName: nameValue,
+          photoURL: "https://i.pinimg.com/736x/92/b4/e7/92b4e7c57de1b5e1e8c5e883fd915450.jpg"
+        }).then(() => {
+          // Use nameValue directly — user.displayName is stale (null) right after updateProfile
+          dispatch(addUser({ uid: user.uid, email: user.email, displayName: nameValue, photoURL: user.photoURL }))
+          navigate("/browse")
+        }).catch((error) => {
+          console.log(error)
+        });
+      })
+      .catch((error) => {
+        setErrorMsg(error.message)
+        // ..
+      });
+      
+    } else {
+      // Sign In logic
+      signInWithEmailAndPassword(auth, emailValue, passwordValue).then((userCredential) => {
+        // Signed in 
+        const user = userCredential.user;
+        console.log("User signed in successfully:", user)
+        navigate("/browse")
+      })
+      .catch((error) => {
+        setErrorMsg(error.message)
+      });
+    }
   }
   const toggleSignInForm = () => {
     setIsSignInForm(!isSignInForm)
@@ -57,6 +104,7 @@ const Login = () => {
               <>
                 <label className="sr-only" htmlFor="name">Full Name</label>
                 <input
+                  ref={name}
                   id="name"
                   type="text"
                   placeholder="Full Name"

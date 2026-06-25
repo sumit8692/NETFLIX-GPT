@@ -9,6 +9,9 @@
     - Routing
     - Form Validation
     - UseRef hook
+    - Firebase Setup
+    - Deploying our app to production
+    - Create Signup User Account
 - Browse(After Authentication)
     - Header
     - Main Movie
