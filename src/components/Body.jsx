@@ -20,14 +20,14 @@ const AuthListener = () => {
         navigate("/browse")
       } else {
         dispatch(removeUser())
-        // Only redirect if on a protected route — don't change URL on /
         if (location.pathname === "/browse") {
           navigate("/login")
         }
       }
     })
     return () => unsubscribe()
-  }, [])
+  }, [location.pathname]) 
+
 
   return null
 }
