@@ -1,47 +1,8 @@
-import { useEffect, useState } from "react";
-import { API_OPTIONS } from "../utils/constants";
+import useMovieTrailer from "../hooks/useMovieTrailer";
 
 const VideoBackground = ({ movieId, backdropPath }) => {
-  const [trailerKey, setTrailerKey] = useState(null);
-  const [hideOverlay, setHideOverlay] = useState(false);
-
-  // Fetch the trailer key from TMDB
-  useEffect(() => {
-    const getMoviesVideos = async () => {
-      try {
-        const response = await fetch(
-          `https://api.themoviedb.org/3/movie/${movieId}/videos`,
-          API_OPTIONS
-        );
-        const json = await response.json();
-        const filterData = json.results?.filter((video) => video.type === "Trailer");
-        const trailer = filterData?.length ? filterData[0] : json.results?.[0];
-        setTrailerKey(trailer?.key);
-      } catch (error) {
-        console.error("Error fetching video background:", error);
-      }
-    };
-
-    if (movieId) {
-      getMoviesVideos();
-    }
-  }, [movieId]);
-
-  // Wait 6 seconds for controls to disappear, then reveal the video underneath
-  useEffect(() => {
-    if (!trailerKey) return;
-    setHideOverlay(false);
-    const timer = setTimeout(() => {
-      setHideOverlay(true);
-    }, 6000);
-    return () => clearTimeout(timer);
-  }, [trailerKey]);
-
-  // TMDB full-resolution backdrop URL
-  const backdropUrl = backdropPath
-    ? `https://image.tmdb.org/t/p/original${backdropPath}`
-    : null;
-
+  const { trailerKey, backdropUrl, hideOverlay } = useMovieTrailer(movieId, backdropPath);
+  
   return (
     <div className="w-screen h-[75vh] overflow-hidden bg-black relative">
       {trailerKey ? (
