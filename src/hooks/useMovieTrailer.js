@@ -20,7 +20,7 @@ const useMovieTrailer = (movieId, backdropPath) => {
     // Skip fetching if trailer is already cached in the Redux store
     if (trailerVideo) return;
 
-    const getMoviesVideos = async () => {
+    const getMoviesVideos = async (movieId) => {
       try {
         const response = await fetch(
           `https://api.themoviedb.org/3/movie/${movieId}/videos`,

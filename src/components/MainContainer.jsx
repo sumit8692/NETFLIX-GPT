@@ -16,8 +16,10 @@ const MainContainer = () => {
 
   return (
     <div className="relative">
-      <VideoTitle title={original_title} overview={overview}/>
       <VideoBackground movieId={id} backdropPath={backdrop_path} />
+      <div className="absolute top-0 left-0 w-full z-40">
+        <VideoTitle title={original_title} overview={overview} />
+      </div>
     </div>
   )
 }
