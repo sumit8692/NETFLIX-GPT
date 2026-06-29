@@ -15,8 +15,18 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+  background-color: #000;
 }
 
 button {
   cursor: pointer;
+}
+
+/* Hide scrollbar while keeping scroll functionality */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;     /* Firefox */
 }

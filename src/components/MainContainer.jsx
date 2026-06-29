@@ -20,6 +20,8 @@ const MainContainer = () => {
       <div className="absolute top-0 left-0 w-full z-40">
         <VideoTitle title={original_title} overview={overview} />
       </div>
+      {/* Gradient fade at the bottom of the hero that blends into the black section below */}
+      <div className="absolute bottom-0 left-0 w-full h-40 bg-gradient-to-b from-transparent to-black z-40 pointer-events-none"></div>
     </div>
   )
 }

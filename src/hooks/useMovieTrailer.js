@@ -50,6 +50,28 @@ const useMovieTrailer = (movieId, backdropPath) => {
     return () => clearTimeout(timer);
   }, [trailerKey]);
 
+  // Re-trigger overlay whenever the user switches back to this tab
+  // (YouTube briefly re-shows controls when the iframe resumes)
+  useEffect(() => {
+    if (!trailerKey) return;
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "visible") {
+        // Show the backdrop again to hide resumption controls
+        setHideOverlay(false);
+        const timer = setTimeout(() => {
+          setHideOverlay(true);
+        }, 4000); // 4s is enough since the video is already buffered
+        return () => clearTimeout(timer);
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, [trailerKey]);
+
   // TMDB full-resolution backdrop URL
   const backdropUrl = backdropPath
     ? `https://image.tmdb.org/t/p/original${backdropPath}`
