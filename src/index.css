@@ -30,3 +30,24 @@ button {
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;     /* Firefox */
 }
+
+/* ── GPT Search overlay: circular reveal from button position ─────────────── */
+/* Origin point ≈ where the "GPT Search" button sits (top-right of viewport)  */
+
+@keyframes gpt-open {
+  from { clip-path: circle(0px at calc(100% - 90px) 38px); }
+  to   { clip-path: circle(200% at calc(100% - 90px) 38px); }
+}
+
+@keyframes gpt-close {
+  from { clip-path: circle(200% at calc(100% - 90px) 38px); }
+  to   { clip-path: circle(0px at calc(100% - 90px) 38px); }
+}
+
+.gpt-overlay-open {
+  animation: gpt-open 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.gpt-overlay-close {
+  animation: gpt-close 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
