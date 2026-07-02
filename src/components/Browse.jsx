@@ -11,10 +11,12 @@ import useSciFiMovies from "../hooks/useSciFiMovies"
 import MainContainer from "./MainContainer"
 import SecondaryContainer from "./SecondaryContainer"
 import GptSearch from "./GptSearch"
+import Loader from "./Loader"
 import { toggleGptSearch } from "../utils/gptSlice"
 
 const Browse = () => {
   const showGptSearch = useSelector((store) => store.gpt.showGptSearch)
+  const nowPlayingMovies = useSelector((store) => store.movies.nowPlayingMovies)
   const dispatch = useDispatch()
 
   useNowPlayingMovies();
@@ -25,6 +27,16 @@ const Browse = () => {
   useThrillerMovies();
   useAnimationMovies();
   useSciFiMovies();
+
+  // Show a beautiful loader while waiting for initial API data
+  if (!nowPlayingMovies) {
+    return (
+      <div className="bg-black min-h-screen">
+        <Header />
+        <Loader />
+      </div>
+    );
+  }
 
   return (
     <div className="bg-black min-h-screen">

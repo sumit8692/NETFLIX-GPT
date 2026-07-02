@@ -16,15 +16,15 @@ const GptSearch = ({ onClose }) => {
       className={`fixed inset-0 z-50 flex flex-col items-center pt-28 px-4 pb-8 overflow-y-auto
         ${isClosing ? "gpt-overlay-close" : "gpt-overlay-open"}`}
     >
-      {/* Dimmed backdrop */}
+      {/* Dimmed backdrop — fixed to viewport so it doesn't scroll away */}
       <div
-        className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+        className="fixed inset-0 bg-black/65 backdrop-blur-md z-0"
         onClick={handleClose}
       />
 
       {/* Content panel */}
       <div
-        className="relative w-full max-w-2xl"
+        className="relative z-10 w-full max-w-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         <GptSearchBar onClose={handleClose} />
