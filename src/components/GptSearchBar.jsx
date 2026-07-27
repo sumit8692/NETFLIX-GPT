@@ -99,7 +99,7 @@ const GptSearchBar = ({ onClose }) => {
     <div className="w-full max-w-2xl mx-auto">
       {/* Label */}
       <p className="text-white/40 text-xs font-semibold uppercase tracking-widest mb-3 text-center">
-        Netflix GPT · AI Movie Search
+        Webflix · AI Movie Search
       </p>
 
       {/* Frosted glass search box */}

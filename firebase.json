@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "site": "webflix-1159d",
     "public": "dist",
     "ignore": [
       "firebase.json",
